@@ -101,13 +101,4 @@ pub trait MintableToken {
         self.data_pointer().set(Arc::new(data));
         Ok(())
     }
-    fn observe_initialization(&self) -> Result<()> {
-        let mut pointer = StoragePointer::from_keyword("/initialized");
-        if pointer.get().len() == 0 {
-            pointer.set_value::<u8>(0x01);
-            Ok(())
-        } else {
-            Err(anyhow!("already initialized"))
-        }
-    }
 }
