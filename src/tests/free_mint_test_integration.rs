@@ -29,7 +29,7 @@ fn init_block_with_free_mint_deployment() -> Result<(bitcoin::Block, AlkaneId)> 
     // Initialize the free-mint contract
     let token_units = 1000u128;
     let value_per_mint = 10u128;
-    let cap = 100u128;
+    let cap = 1001u128;
     let name_part1 = 0x54534554u128; // "TEST" in little-endian
     let name_part2 = 0x32u128; // "2" in little-endian
     let symbol = 0x545354u128; // "TST" in little-endian
@@ -137,6 +137,30 @@ fn test_free_mint_initialization() -> Result<()> {
 
     let block_height = 840_000;
     let (test_block, free_mint_deployment) = init_block_with_free_mint_deployment()?;
+
+    // Index the block
+    index_block(&test_block, block_height)?;
+
+    // Check the token balance
+    let balance = get_token_balance(&test_block, free_mint_deployment)?;
+    assert_eq!(
+        balance, 1000u128,
+        "Initial token balance should match token_units"
+    );
+    Ok(())
+}
+
+#[wasm_bindgen_test]
+fn test_free_mint_cap() -> Result<()> {
+    clear();
+
+    let block_height = 840_000;
+    let (mut test_block, free_mint_deployment) = init_block_with_free_mint_deployment()?;
+    let last_outpoint = OutPoint {
+        txid: test_block.txdata.last().unwrap().compute_txid(),
+        vout: 0,
+    };
+    create_mint_tx(&mut test_block, free_mint_deployment, last_outpoint);
 
     // Index the block
     index_block(&test_block, block_height)?;

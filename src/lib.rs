@@ -83,11 +83,7 @@ impl ContextHandle {
     }
 }
 
-impl AlkaneResponder for ContextHandle {
-    fn execute(&self) -> Result<CallResponse> {
-        Ok(CallResponse::default())
-    }
-}
+impl AlkaneResponder for ContextHandle {}
 
 pub const CONTEXT: ContextHandle = ContextHandle(());
 
@@ -205,17 +201,6 @@ pub trait MintableToken: AlkaneResponder {
         self.data_pointer().set(Arc::new(data));
 
         Ok(())
-    }
-
-    /// Observe initialization to prevent multiple initializations
-    fn observe_initialization(&self) -> Result<()> {
-        let mut pointer = StoragePointer::from_keyword("/initialized");
-        if pointer.get().len() == 0 {
-            pointer.set_value::<u8>(0x01);
-            Ok(())
-        } else {
-            Err(anyhow!("already initialized"))
-        }
     }
 }
 
@@ -514,14 +499,7 @@ impl MintableAlkane {
     }
 }
 
-impl AlkaneResponder for MintableAlkane {
-    fn execute(&self) -> Result<CallResponse> {
-        // This method should not be called directly when using MessageDispatch
-        Err(anyhow!(
-            "This method should not be called directly. Use the declare_alkane macro instead."
-        ))
-    }
-}
+impl AlkaneResponder for MintableAlkane {}
 
 // Use the MessageDispatch macro for opcode handling
 declare_alkane! {
