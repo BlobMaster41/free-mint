@@ -19,6 +19,7 @@ use metashrew_support::index_pointer::KeyValuePointer;
 use metashrew_support::utils::consensus_decode;
 use std::io::Cursor;
 use std::sync::Arc;
+pub mod precompiled;
 #[cfg(test)]
 pub mod tests;
 

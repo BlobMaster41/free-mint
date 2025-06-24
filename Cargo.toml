@@ -16,6 +16,7 @@ protorune-support = { git = "https://github.com/kungfuflex/alkanes-rs" }
 ordinals = { git = "https://github.com/kungfuflex/alkanes-rs" }
 anyhow = "1.0.94"
 bitcoin = { version = "0.32.4", features = ["rand"] }
+hex_lit = "0.1.1"
 
 [dev-dependencies]
 once_cell = "1.19.0"
